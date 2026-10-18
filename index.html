@@ -18,7 +18,7 @@ body {background:radial-gradient(ellipse at 17% 15%,#f6fbff 0%,#d7f3fe 37%,#98da
 button {font:inherit;cursor:pointer;touch-action:manipulation;border:0; -webkit-appearance:none}
 button:focus-visible {outline:3px solid #0c6ced;outline-offset:3px}
 [hidden]{display:none!important}
-.game-shell{position:relative;width:min(100vw,520px);height:100dvh;max-height:920px;min-height:340px;overflow:hidden;background:#9ce7a7;box-shadow:var(--shadow);isolation:isolate}
+.game-shell{position:relative;width:100vw;height:100dvh;min-height:0;overflow:hidden;background:#9ce7a7;isolation:isolate}
 #gameCanvas{position:absolute;inset:0;width:100%;height:100%;display:block;touch-action:none;cursor:crosshair}
 .hud {position:absolute;z-index:5;left:0;right:0;top:0;padding:calc(12px + env(safe-area-inset-top,0px)) 13px 0;display:flex;justify-content:space-between;gap:6px;pointer-events:none}
 .hud-left,.hud-right{display:flex;align-items:center;gap:6px}.hud-pill{min-height:36px;display:flex;align-items:center;justify-content:center;padding:6px 10px;border:2px solid rgba(255,255,255,.9);border-radius:16px;background:rgba(255,255,255,.91);font-size:16px;font-weight:900;box-shadow:0 4px 0 rgba(50,88,102,.15);white-space:nowrap}
@@ -38,7 +38,7 @@ button:focus-visible {outline:3px solid #0c6ced;outline-offset:3px}
 .dialog-card{padding:25px 20px 24px;max-width:360px}.dialog-card h2{font-size:clamp(22px,6vw,28px);color:#27476c;font-weight:1000;margin-bottom:8px}.dialog-card p{font-size:14px;line-height:1.6;color:#78919d;margin-bottom:18px}.ready-icon,.big-emoji{font-size:65px;margin-bottom:10px}.ready-icon{animation:wave 1.3s ease-in-out infinite}.loading-line{padding:12px;margin-bottom:8px;background:#e5f5ff;border-radius:13px;font-size:13px;color:#306bb4;font-weight:800}.small-card{max-width:300px}.end-card .big-emoji{margin:0 0 8px}.result-row{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin:15px 0 21px}.result-row>div{border-radius:15px;background:#eff7ff;padding:12px 3px}.result-row small{display:block;font-size:10px;color:#6b879d;font-weight:800}.result-row strong{display:block;font-size:21px;color:#2b65ab;margin-top:5px}
 .toast{position:absolute;z-index:50;left:50%;bottom:calc(155px + env(safe-area-inset-bottom,0px));transform:translate(-50%,10px);pointer-events:none;opacity:0;background:#243b5de3;color:#fff;border-radius:999px;padding:10px 18px;font-weight:900;font-size:13px;max-width:90%;text-align:center;transition:opacity .25s,transform .25s}.toast.show{opacity:1;transform:translate(-50%,0)}
 @keyframes wave{0%,100%{transform:rotate(-12deg)}50%{transform:rotate(13deg)}}@keyframes spin{to{transform:rotate(360deg)}}
-@media (min-width:540px){.game-shell{height:min(96dvh,920px);border:7px solid rgba(255,255,255,.95);border-radius:34px}.hud{padding-top:12px}.top-caption{top:58px}.play-tip{bottom:17px}.change-mode{bottom:20px}}
+@media (min-width:540px){.game-shell{height:100dvh;border:0;border-radius:0}.hud{padding-top:12px}.top-caption{top:58px}.play-tip{bottom:17px}.change-mode{bottom:20px}}
 @media (max-height:610px){.intro-card{padding:10px 16px 14px;border-radius:22px}.hero-road{width:75px;height:75px;border-radius:20px}.hero-car{font-size:44px;top:13px}.hero-star{font-size:20px}.intro-kicker{font-size:10px}.intro-lead{font-size:12px;line-height:1.35}.step-chips{margin:8px 0 10px}.step-chips span{font-size:10px;padding:4px 7px}.big-button{min-height:41px;font-size:14px;padding:9px}.start-hint{margin-top:10px;font-size:10px}h1{font-size:27px;margin:3px 0}.dialog-card{padding:15px}.dialog-card p{margin-bottom:9px}}
 @media (prefers-reduced-motion:reduce){.ready-icon,.hero-star{animation:none}*{scroll-behavior:auto}}
 
@@ -349,7 +349,8 @@ body{display:block;width:100vw;height:100dvh;background:#91dbb3}
     canvas.width = Math.round(w * dpi); canvas.height = Math.round(h * dpi);
     canvas.style.width = `${w}px`; canvas.style.height = `${h}px`;
     ctx.setTransform(dpi, 0, 0, dpi, 0, 0);
-    const roadWidth = w <= 540 ? w*.79 : w < 1000 ? w*.72 : Math.min(w*.73,Math.max(760,h*1.09));
+    // Tablet landscape: nearly edge-to-edge playable road, not a thin center strip.
+    const roadWidth = w <= 540 ? w*.84 : w < 1000 ? w*.88 : w*.95;
     road = {left:(w-roadWidth)/2,right:(w+roadWidth)/2,width:roadWidth};
     if (oldH && oldH !== h) for (const obj of objects) obj.y = obj.y / oldH * h;
   }
@@ -662,7 +663,7 @@ body{display:block;width:100vw;height:100dvh;background:#91dbb3}
     note(560,.15,'sine',.03); note(700,.18,'sine',.03,.18); note(850,.28,'sine',.03,.36);
   }
 
-  function carDimensions() {const width=WARP(road.width/3*.50,45,94);return {width,height:width*1.51};}
+  function carDimensions() {const ratio=w<=540?.50:w<=1000?.45:.40;const width=WARP(road.width/3*ratio,45,125);return {width,height:width*1.51};}
   function carCenterY() {return h*.76;}
   function carCenterX() {return road.left + carX*road.width;}
   function laneX(lane) {return road.left + (lane + .5)*road.width/3;}
@@ -874,7 +875,7 @@ body{display:block;width:100vw;height:100dvh;background:#91dbb3}
     drawTrack(visualTime);
     for (const obj of objects) {
       if (obj.used) continue;
-      const x = laneX(obj.lane), y = obj.y, s = WARP((road.width/3)/100,.85,1.80);
+      const x = laneX(obj.lane), y = obj.y, s = WARP((road.width/3)/100,.85,2.65);
       if (obj.kind === 'cone') drawCone(x,y,s);
       else if (obj.kind === 'box') drawBox(x,y,s);
       else if (obj.kind === 'puddle') drawPuddle(x,y,s);
