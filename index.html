@@ -124,7 +124,6 @@ body{display:flex;width:100vw;height:100dvh;justify-content:center;align-items:c
       <div class="hud-right">
         <div class="hud-pill distance-pill">🏁 <b id="scoreDisplay">0</b></div>
         <button class="circle-btn" id="soundButton" aria-label="关闭声音" title="开关声音">🔊</button>
-        <button class="circle-btn fullscreen-btn" id="fullscreenButton" aria-label="全屏游戏" title="全屏游戏">⛶</button>
         <button class="circle-btn" id="pauseButton" aria-label="暂停游戏" title="暂停/继续" disabled>⏸</button>
       </div>
     </section>
@@ -978,13 +977,6 @@ body{display:flex;width:100vw;height:100dvh;justify-content:center;align-items:c
   $('touchStart').addEventListener('click',beginTouch);
   $('readyTouch').addEventListener('click',beginTouch);
   $('pauseButton').addEventListener('click',pauseOrResume);
-  $('fullscreenButton').addEventListener('click', async () => {
-    try {
-      if (document.fullscreenElement && document.exitFullscreen) await document.exitFullscreen();
-      else if (shell.requestFullscreen) await shell.requestFullscreen();
-      else showToast('iPad全屏：分享 → 添加到主屏幕，再从桌面打开',4);
-    } catch (_) {showToast('iPad全屏：分享 → 添加到主屏幕，再从桌面打开',4);}
-  });
   $('resumeButton').addEventListener('click',pauseOrResume);
   $('replayButton').addEventListener('click',startAnotherRound);
   $('homeButton').addEventListener('click',goHome);
