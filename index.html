@@ -1,0 +1,704 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no" />
+  <meta name="theme-color" content="#85d6ff" />
+  <meta name="description" content="手掌动一动，小汽车躲障碍！适合儿童的免费 H5 手势小游戏。" />
+  <title>小手开车车 🚗 · 手势闯关小游戏</title>
+  <style>
+:root { color-scheme: light; --ink:#243653; --blue:#357af6; --cream:#fffef3; --shadow:0 16px 48px rgba(48,83,129,.24) }
+* {box-sizing:border-box} html, body { margin:0; width:100%; height:100%; overflow:hidden; -webkit-tap-highlight-color:transparent }
+body {background:radial-gradient(ellipse at 17% 15%,#f6fbff 0%,#d7f3fe 37%,#98daf7 100%); font-family:ui-rounded,"PingFang SC","Microsoft YaHei","Helvetica Neue",Arial,sans-serif; color:var(--ink); user-select:none; -webkit-user-select:none; display:flex; align-items:center; justify-content:center}
+button {font:inherit;cursor:pointer;touch-action:manipulation;border:0; -webkit-appearance:none}
+button:focus-visible {outline:3px solid #0c6ced;outline-offset:3px}
+[hidden]{display:none!important}
+.game-shell{position:relative;width:min(100vw,520px);height:100dvh;max-height:920px;min-height:340px;overflow:hidden;background:#9ce7a7;box-shadow:var(--shadow);isolation:isolate}
+#gameCanvas{position:absolute;inset:0;width:100%;height:100%;display:block;touch-action:none;cursor:crosshair}
+.hud {position:absolute;z-index:5;left:0;right:0;top:0;padding:calc(12px + env(safe-area-inset-top,0px)) 13px 0;display:flex;justify-content:space-between;gap:6px;pointer-events:none}
+.hud-left,.hud-right{display:flex;align-items:center;gap:6px}.hud-pill{min-height:36px;display:flex;align-items:center;justify-content:center;padding:6px 10px;border:2px solid rgba(255,255,255,.9);border-radius:16px;background:rgba(255,255,255,.91);font-size:16px;font-weight:900;box-shadow:0 4px 0 rgba(50,88,102,.15);white-space:nowrap}
+.heart-pill{font-size:14px;letter-spacing:-3px;padding-right:13px}.star-pill{color:#ed8b12}.distance-pill{color:#3458aa}.circle-btn{pointer-events:auto;display:grid;place-items:center;width:36px;height:36px;border-radius:14px;background:#fff;border:2px solid #fff;box-shadow:0 4px 0 rgba(50,88,102,.15);font-size:17px}.circle-btn:disabled{opacity:.6}
+.top-caption{position:absolute;top:calc(58px + env(safe-area-inset-top,0px));left:50%;transform:translateX(-50%);width:max-content;max-width:90%;border-radius:999px;background:rgba(255,255,255,.88);box-shadow:0 2px 7px rgba(37,74,110,.09);padding:5px 11px;text-align:center;font-size:11px;font-weight:800;color:#326286;letter-spacing:.15px;z-index:2;pointer-events:none}.top-caption span{font-weight:600}
+.camera-widget{position:absolute;z-index:5;bottom:calc(49px + env(safe-area-inset-bottom,0px));right:12px;width:114px;border:3px solid white;border-radius:18px;overflow:hidden;background:#27364c;box-shadow:0 5px 18px #173e5860;pointer-events:none}.camera-heading{background:#fff;display:flex;align-items:center;justify-content:center;gap:6px;font-size:9px;font-weight:900;height:25px;padding:0 4px;white-space:nowrap}.camera-led{width:8px;height:8px;flex:none;border-radius:50%;background:#ffbd4f}.camera-led.found{background:#35ce6c;box-shadow:0 0 0 2px #b9ffc8}.camera-image-wrap{position:relative;height:86px;background:#172a38}.camera-image-wrap video{display:block;width:100%;height:100%;object-fit:cover;transform:scaleX(-1)}.hand-reticle{position:absolute;left:50%;top:50%;font-size:25px;transform:translate(-50%,-50%);filter:drop-shadow(0 1px 3px black);opacity:.6;transition:opacity .1s}.hand-reticle.found{opacity:1}
+.play-tip{position:absolute;z-index:3;bottom:calc(17px + env(safe-area-inset-bottom,0px));left:50%;transform:translateX(-50%);background:rgba(255,255,255,.9);border-radius:15px;padding:9px 13px;font-size:12px;font-weight:800;white-space:nowrap;box-shadow:0 5px 12px #21465e25;pointer-events:none}
+.change-mode{position:absolute;z-index:6;left:12px;bottom:calc(20px + env(safe-area-inset-bottom,0px));padding:7px 9px;border-radius:13px;background:#fff;box-shadow:0 4px 0 #19415a30;color:#296296;font-size:12px;font-weight:800}
+.overlay{position:absolute;z-index:10;inset:0;display:flex;align-items:center;justify-content:center;padding:18px 20px;background:linear-gradient(155deg,rgba(159,228,255,.93) 1%,rgba(197,244,214,.93) 85%);text-align:center;overflow-y:auto;overscroll-behavior:contain}
+.overlay.hidden{display:none}.intro-card,.dialog-card{position:relative;z-index:1;width:100%;max-width:400px;border-radius:32px;border:4px solid #fff;background:linear-gradient(180deg,#fffff7,#fff9e7);padding:16px 19px 20px;box-shadow:0 12px 0 #72bcae,0 25px 45px #448ab44f}
+.hero-road{position:relative;overflow:hidden;width:112px;height:112px;margin:0 auto 3px;border:5px solid white;border-radius:30px;background:repeating-linear-gradient(90deg,#536e86 0 43%,#fff3 43% 47%,#536e86 47% 100%);box-shadow:0 6px 0 #d8e6ee}.hero-car{position:absolute;top:24px;left:10px;font-size:65px;transform:rotate(-8deg)}.hero-star{position:absolute;top:0;right:6px;font-size:27px;animation:spin 5s linear infinite}.intro-kicker{margin-top:9px;font-size:12px;letter-spacing:1.6px;font-weight:900;color:#23a79e}h1,h2,p{margin:0}h1{font-size:clamp(29px,7vw,39px);letter-spacing:2px;font-weight:1000;color:#27476c;margin:4px 0 7px}.intro-lead{font-size:15px;font-weight:700;line-height:1.65;color:#617589}.step-chips{display:flex;gap:5px;justify-content:center;flex-wrap:wrap;margin:15px 0 17px}.step-chips span{background:#e6f4ff;border:1px solid #bbdefe;border-radius:999px;color:#3e7197;padding:6px 8px;font-size:11px;font-weight:850}.big-button{width:100%;display:block;position:relative;border-radius:18px;padding:13px 13px;min-height:49px;font-size:16px;font-weight:1000;letter-spacing:.2px;transition:transform .12s;line-height:1.3}.big-button:active{transform:translateY(3px)}.primary{color:white;background:linear-gradient(180deg,#438cf8,#2468ea);box-shadow:0 5px 0 #1751b3}.secondary{margin-top:11px;color:#426b8b;background:#e5f6ff;border:2px solid #c7e9ff;box-shadow:0 4px 0 #baddeb}.big-button:disabled{filter:grayscale(.5);opacity:.8;cursor:wait}.button-arrow{float:right;font-size:20px}.start-hint{font-size:11px;line-height:1.55;color:#7992a1;margin-top:16px}.intro-cloud{position:absolute;background:white;border-radius:999px;opacity:.85;width:85px;height:33px}.intro-cloud:before,.intro-cloud:after{content:"";position:absolute;background:white;border-radius:50%}.intro-cloud:before{width:38px;height:38px;left:15px;top:-18px}.intro-cloud:after{width:42px;height:42px;right:12px;top:-21px}.intro-cloud.one{left:-10px;top:12%}.intro-cloud.two{right:-13px;bottom:16%;transform:scale(.85)}
+.dialog-card{padding:25px 20px 24px;max-width:360px}.dialog-card h2{font-size:clamp(22px,6vw,28px);color:#27476c;font-weight:1000;margin-bottom:8px}.dialog-card p{font-size:14px;line-height:1.6;color:#78919d;margin-bottom:18px}.ready-icon,.big-emoji{font-size:65px;margin-bottom:10px}.ready-icon{animation:wave 1.3s ease-in-out infinite}.loading-line{padding:12px;margin-bottom:8px;background:#e5f5ff;border-radius:13px;font-size:13px;color:#306bb4;font-weight:800}.small-card{max-width:300px}.end-card .big-emoji{margin:0 0 8px}.result-row{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin:15px 0 21px}.result-row>div{border-radius:15px;background:#eff7ff;padding:12px 3px}.result-row small{display:block;font-size:10px;color:#6b879d;font-weight:800}.result-row strong{display:block;font-size:21px;color:#2b65ab;margin-top:5px}
+.toast{position:absolute;z-index:50;left:50%;bottom:calc(155px + env(safe-area-inset-bottom,0px));transform:translate(-50%,10px);pointer-events:none;opacity:0;background:#243b5de3;color:#fff;border-radius:999px;padding:10px 18px;font-weight:900;font-size:13px;max-width:90%;text-align:center;transition:opacity .25s,transform .25s}.toast.show{opacity:1;transform:translate(-50%,0)}
+@keyframes wave{0%,100%{transform:rotate(-12deg)}50%{transform:rotate(13deg)}}@keyframes spin{to{transform:rotate(360deg)}}
+@media (min-width:540px){.game-shell{height:min(96dvh,920px);border:7px solid rgba(255,255,255,.95);border-radius:34px}.hud{padding-top:12px}.top-caption{top:58px}.camera-widget{bottom:49px}.play-tip{bottom:17px}.change-mode{bottom:20px}}
+@media (max-height:610px){.intro-card{padding:10px 16px 14px;border-radius:22px}.hero-road{width:75px;height:75px;border-radius:20px}.hero-car{font-size:44px;top:13px}.hero-star{font-size:20px}.intro-kicker{font-size:10px}.intro-lead{font-size:12px;line-height:1.35}.step-chips{margin:8px 0 10px}.step-chips span{font-size:10px;padding:4px 7px}.big-button{min-height:41px;font-size:14px;padding:9px}.start-hint{margin-top:10px;font-size:10px}h1{font-size:27px;margin:3px 0}.dialog-card{padding:15px}.dialog-card p{margin-bottom:9px}}
+@media (prefers-reduced-motion:reduce){.ready-icon,.hero-star{animation:none}*{scroll-behavior:auto}}
+
+/* When teaching the camera gesture, keep the live mirrored preview visible above the overlay. */
+.game-shell.is-ready .camera-widget{z-index:15;bottom:calc(10px + env(safe-area-inset-bottom,0px));right:50%;transform:translateX(50%);width:126px}
+.game-shell.is-ready .camera-image-wrap{height:88px}
+.game-shell.is-ready .ready-card{transform:translateY(-61px)}
+@media (max-height:490px){.game-shell.is-ready .ready-card{transform:translateY(-44px);padding:10px}.game-shell.is-ready .ready-icon{font-size:35px;margin-bottom:0}.game-shell.is-ready .ready-card p{font-size:12px}.game-shell.is-ready .camera-image-wrap{height:60px}}
+
+</style>
+</head>
+<body>
+  <main class="game-shell" id="gameShell" aria-label="小手开车车游戏">
+    <canvas id="gameCanvas" aria-label="俯视角汽车躲避障碍游戏画面"></canvas>
+
+    <section class="hud" aria-label="游戏状态">
+      <div class="hud-left">
+        <div class="hud-pill heart-pill" id="heartDisplay" aria-label="剩余三颗爱心">❤️❤️❤️</div>
+        <div class="hud-pill star-pill"><span aria-hidden="true">⭐</span> <b id="starDisplay">0</b></div>
+      </div>
+      <div class="hud-right">
+        <div class="hud-pill distance-pill">🏁 <b id="scoreDisplay">0</b></div>
+        <button class="circle-btn" id="soundButton" aria-label="关闭声音" title="开关声音">🔊</button>
+        <button class="circle-btn" id="pauseButton" aria-label="暂停游戏" title="暂停/继续" disabled>⏸</button>
+      </div>
+    </section>
+
+    <div class="top-caption">🚙 小手开车车 <span>· 避开障碍，接住星星！</span></div>
+
+    <section class="camera-widget" id="cameraWidget" hidden aria-label="摄像头手势识别预览">
+      <div class="camera-heading"><span class="camera-led" id="cameraLed"></span><span id="cameraText">正在寻找小手…</span></div>
+      <div class="camera-image-wrap">
+        <video id="cameraVideo" playsinline autoplay muted></video>
+        <div class="hand-reticle" id="handReticle">✋</div>
+      </div>
+    </section>
+
+    <div class="play-tip" id="playTip" hidden>👆 左右移动手指，控制汽车</div>
+    <button class="change-mode" id="changeMode" hidden>↔ 切换操控</button>
+
+    <div class="overlay" id="startOverlay">
+      <div class="intro-decoration intro-cloud one"></div>
+      <div class="intro-decoration intro-cloud two"></div>
+      <div class="intro-card">
+        <div class="hero-road" aria-hidden="true"><div class="hero-car">🚗</div><span class="hero-star">⭐</span></div>
+        <div class="intro-kicker">送给小朋友的汽车游戏</div>
+        <h1>小手开车车</h1>
+        <p class="intro-lead">左一点、右一点，<br />躲开障碍，收集小星星！</p>
+        <div class="step-chips"><span>🖐️ 挥挥小手</span><span>🚧 躲避路障</span><span>⭐ 收集星星</span></div>
+        <button class="big-button primary" id="gestureStart">📷 用手势开车 <span class="button-arrow">→</span></button>
+        <button class="big-button secondary" id="touchStart">👆 用触屏 / 鼠标玩</button>
+        <div class="start-hint" id="startHint">手势模式需要允许摄像头；画面只在本机识别，不上传。</div>
+      </div>
+    </div>
+
+    <div class="overlay hidden" id="readyOverlay">
+      <div class="dialog-card ready-card">
+        <div class="ready-icon">🖐️</div>
+        <h2>让摄像头看到小手</h2>
+        <p>张开一只手掌，左右移动，汽车就会跟着走！</p>
+        <div class="loading-line" id="readyStatus" role="status">正在准备摄像头…</div>
+        <button class="big-button secondary" id="readyTouch">换成触屏玩</button>
+      </div>
+    </div>
+
+    <div class="overlay hidden" id="pauseOverlay">
+      <div class="dialog-card small-card">
+        <div class="big-emoji">⏸️</div>
+        <h2>休息一下</h2>
+        <p>车车在等你回来！</p>
+        <button class="big-button primary" id="resumeButton">继续开车 →</button>
+      </div>
+    </div>
+
+    <div class="overlay hidden" id="overOverlay">
+      <div class="dialog-card end-card">
+        <div class="big-emoji">🏆</div>
+        <h2 id="overTitle">你是开车小高手！</h2>
+        <p>今天又完成了一次勇敢的冒险！</p>
+        <div class="result-row">
+          <div><small>前进距离</small><strong id="resultScore">0</strong></div>
+          <div><small>收集星星</small><strong id="resultStars">0</strong></div>
+          <div><small>最高纪录</small><strong id="resultBest">0</strong></div>
+        </div>
+        <button class="big-button primary" id="replayButton">🚗 再玩一次</button>
+        <button class="big-button secondary" id="homeButton">换一种操控方式</button>
+      </div>
+    </div>
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  </main>
+  <script>
+(() => {
+  'use strict';
+  const $ = id => document.getElementById(id);
+  const canvas = $('gameCanvas');
+  const ctx = canvas.getContext('2d', { alpha: false });
+  const shell = $('gameShell');
+  const video = $('cameraVideo');
+  const readyStatus = $('readyStatus');
+  const overlays = {
+    start: $('startOverlay'), ready: $('readyOverlay'),
+    paused: $('pauseOverlay'), over: $('overOverlay')
+  };
+  const WARP = (v, min, max) => Math.max(min, Math.min(max, v));
+  const mix = (a, b, f) => a + (b - a) * f;
+  const rand = (a, b) => a + Math.random() * (b - a);
+  const TURN_RATE = 4.7;
+  const assetRoot = 'https://cdn.jsdelivr.net/npm/@mediapipe/hands@0.4.1675469240/';
+  const fallbackRoot = 'https://unpkg.com/@mediapipe/hands@0.4.1675469240/';
+  let w = 390, h = 760, dpi = 1, road = {left: 48, right: 342, width: 294};
+  let mode = 'touch', phase = 'start', totalTime = 0, visualTime = 0, score = 0, stars = 0, lives = 3;
+  let best = 0, carX = .5, targetX = .5, objects = [], effects = [], spawnTimer = .7, invincible = 0;
+  let lastFrame = performance.now(), tickDistance = 0, lastSoundAt = 0;
+  let soundOn = true, audioCtx = null, toastTimer = null;
+  let stream = null, handTracker = null, trackingTimer = null, trackingActive = false;
+  let session = 0, loadPromise = null, loadRoot = assetRoot, gotHand = false;
+  let moveLeft = false, moveRight = false, gestureReady = false, resumeExisting = false;
+  const prefersReducedMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  try { best = Number(localStorage.getItem('tiny-car-best') || 0) || 0; } catch (_) {}
+
+  function setPhase(next) {
+    phase = next;
+    for (const [key, element] of Object.entries(overlays)) element.classList.toggle('hidden', key !== next);
+    shell.classList.toggle('is-ready', next === 'ready');
+    $('pauseButton').disabled = !['running', 'paused'].includes(next);
+    $('pauseButton').textContent = next === 'paused' ? '▶️' : '⏸';
+    $('pauseButton').setAttribute('aria-label', next === 'paused' ? '继续游戏' : '暂停游戏');
+    $('cameraWidget').hidden = !(mode === 'gesture' && ['ready','running','paused','over'].includes(next) && !!stream);
+    $('playTip').hidden = next !== 'running' || mode === 'gesture';
+    $('changeMode').hidden = next !== 'running';
+  }
+
+  function resize() {
+    const nw = Math.max(200, shell.clientWidth), nh = Math.max(320, shell.clientHeight);
+    const oldH = h;
+    w = nw; h = nh; dpi = Math.min(window.devicePixelRatio || 1, 2);
+    canvas.width = Math.round(w * dpi); canvas.height = Math.round(h * dpi);
+    canvas.style.width = `${w}px`; canvas.style.height = `${h}px`;
+    ctx.setTransform(dpi, 0, 0, dpi, 0, 0);
+    road = {left:w*.135, right:w*.865, width:w*.73};
+    if (oldH && oldH !== h) for (const obj of objects) obj.y = obj.y / oldH * h;
+  }
+
+  function resetGame() {
+    totalTime = 0; score = 0; stars = 0; lives = 3; carX = .5; targetX = .5;
+    objects = []; effects = []; spawnTimer = .9; invincible = 0; tickDistance = 0;
+    refreshHUD();
+  }
+
+  function refreshHUD() {
+    $('heartDisplay').textContent = '❤️'.repeat(lives) + '🤍'.repeat(3 - lives);
+    $('heartDisplay').setAttribute('aria-label', `还剩${lives}颗爱心`);
+    $('starDisplay').textContent = stars;
+    $('scoreDisplay').textContent = score;
+  }
+
+  function showToast(message, seconds = 1.8) {
+    const toast = $('toast');
+    toast.textContent = message;
+    toast.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => toast.classList.remove('show'), seconds * 1000);
+  }
+
+  function beginTouch() {
+    const previouslyStarted = phase === 'running' || (phase === 'ready' && resumeExisting);
+    stopGesture();
+    mode = 'touch';
+    gestureReady = false;
+    resumeExisting = false;
+    if (!previouslyStarted) resetGame();
+    setPhase('running');
+    $('changeMode').textContent = '📷 手势驾驶';
+    $('playTip').textContent = '👆 手指 / 鼠标左右移动开车';
+    initAudio();
+    showToast('小车出发！躲开路障吧 🚗');
+  }
+
+  function initAudio() {
+    if (!soundOn) return;
+    try {
+      const AudioEngine = window.AudioContext || window.webkitAudioContext;
+      if (AudioEngine) {
+        if (!audioCtx) audioCtx = new AudioEngine();
+        if (audioCtx.state === 'suspended') audioCtx.resume().catch(() => {});
+      }
+    } catch (_) {}
+  }
+
+  function note(frequency = 660, duration = .11, type = 'sine', volume = .035, delay = 0) {
+    if (!soundOn || !audioCtx || audioCtx.state !== 'running') return;
+    try {
+      const t = audioCtx.currentTime + delay;
+      const oscillator = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+      oscillator.type = type; oscillator.frequency.setValueAtTime(frequency, t);
+      gain.gain.setValueAtTime(.0001, t);
+      gain.gain.exponentialRampToValueAtTime(volume, t + .015);
+      gain.gain.exponentialRampToValueAtTime(.0001, t + duration);
+      oscillator.connect(gain).connect(audioCtx.destination);
+      oscillator.start(t); oscillator.stop(t + duration + .01);
+    } catch (_) {}
+  }
+
+  function playStarSound() { note(730,.13,'sine',.038); note(1050,.22,'sine',.039,.10); }
+  function playHitSound() { note(250,.17,'triangle',.055); note(170,.27,'triangle',.04,.13); }
+
+  function loadScript(url) {
+    return new Promise((resolve, reject) => {
+      const tag = document.createElement('script');
+      tag.src = url; tag.async = true; tag.crossOrigin = 'anonymous';
+      const timer = setTimeout(() => { tag.remove(); reject(new Error('识别组件下载超时')); }, 15000);
+      tag.onload = () => { clearTimeout(timer); resolve(); };
+      tag.onerror = () => { clearTimeout(timer); tag.remove(); reject(new Error('识别组件无法下载')); };
+      document.head.appendChild(tag);
+    });
+  }
+
+  function ensureHands() {
+    if (typeof window.Hands === 'function') return Promise.resolve();
+    if (!loadPromise) {
+      loadPromise = (async () => {
+        try {
+          loadRoot = assetRoot;
+          await loadScript(assetRoot + 'hands.js');
+        } catch (_) {
+          loadRoot = fallbackRoot;
+          await loadScript(fallbackRoot + 'hands.js');
+        }
+        if (typeof window.Hands !== 'function') throw new Error('手势识别模块未能初始化');
+      })().catch(err => { loadPromise = null; throw err; });
+    }
+    return loadPromise;
+  }
+
+  function stopGesture() {
+    session++;
+    trackingActive = false;
+    if (trackingTimer) clearTimeout(trackingTimer);
+    trackingTimer = null;
+    if (stream) {
+      for (const track of stream.getTracks()) track.stop();
+      stream = null;
+    }
+    if (video.srcObject) video.srcObject = null;
+    const closing = handTracker;
+    handTracker = null;
+    if (closing && typeof closing.close === 'function') {
+      try { Promise.resolve(closing.close()).catch(() => {}); } catch (_) {}
+    }
+    gotHand = false;
+    $('cameraWidget').hidden = true;
+    $('cameraLed').classList.remove('found');
+  }
+
+  async function beginGesture(fromGame = false) {
+    if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia || !window.isSecureContext) {
+      showToast('手势需要 HTTPS 或 localhost；可以先玩触屏模式', 3);
+      if (fromGame) return;
+      $('startHint').textContent = '当前环境不能打开摄像头。发布到 HTTPS 地址后可用手势模式。';
+      return;
+    }
+    stopGesture();
+    mode = 'gesture';
+    resumeExisting = fromGame;
+    gotHand = false;
+    const mySession = session;
+    setPhase('ready');
+    $('changeMode').textContent = '👆 触控驾驶';
+    readyStatus.textContent = '等待允许摄像头…';
+    initAudio();
+    try {
+      // This call happens before any other await, directly from the user's button click.
+      const acquired = await navigator.mediaDevices.getUserMedia({
+        audio:false, video:{facingMode:'user',width:{ideal:320},height:{ideal:240},frameRate:{ideal:20,max:30}}
+      });
+      if (mySession !== session) { acquired.getTracks().forEach(track => track.stop()); return; }
+      stream = acquired;
+      video.srcObject = stream;
+      await video.play();
+      if (mySession !== session) return;
+      $('cameraWidget').hidden = false;
+      readyStatus.textContent = '正在加载小手识别（首次需要联网）…';
+      await ensureHands();
+      if (mySession !== session) return;
+      handTracker = new window.Hands({locateFile: filename => loadRoot + filename});
+      handTracker.setOptions({maxNumHands:1,modelComplexity:0,minDetectionConfidence:.58,minTrackingConfidence:.52,selfieMode:false});
+      handTracker.onResults(onHands);
+      trackingActive = true;
+      readyStatus.textContent = '识别准备好了！请伸出一只手掌 ✋';
+      $('cameraText').textContent = '正在找小手…';
+      trackingLoop(mySession);
+    } catch (error) {
+      if (mySession !== session) return;
+      const name = error && error.name || '';
+      const message = name === 'NotAllowedError' || name === 'PermissionDeniedError'
+        ? '摄像头未授权。可以开启权限重试，或使用触屏。'
+        : name === 'NotFoundError' ? '没有找到摄像头，请改用触屏。'
+        : '手势识别启动失败，请检查网络或改用触屏。';
+      stopGesture();
+      mode = 'touch';
+      if (fromGame) {
+        setPhase('running');
+        $('changeMode').textContent = '📷 手势驾驶';
+        showToast(message, 3);
+      } else {
+        setPhase('start');
+        $('startHint').textContent = message;
+      }
+    }
+  }
+
+  async function trackingLoop(mySession) {
+    if (!trackingActive || mySession !== session) return;
+    if (video.readyState >= 2 && !document.hidden && handTracker) {
+      try { await handTracker.send({image:video}); }
+      catch (error) {
+        if (mySession === session) {
+          console.warn('Hand tracking error:', error);
+          stopGesture();
+          mode = 'touch';
+          if (phase === 'ready') setPhase('start');
+          else if (phase === 'running' || phase === 'paused') setPhase(phase);
+          $('startHint').textContent = '识别运行出错，可以继续用触屏玩。';
+          $('changeMode').textContent = '📷 手势驾驶';
+          showToast('手势识别中断，已切换成触屏操控', 3);
+        }
+        return;
+      }
+    }
+    if (!trackingActive || mySession !== session) return;
+    trackingTimer = setTimeout(() => trackingLoop(mySession), 42);
+  }
+
+  function onHands(results) {
+    if (mode !== 'gesture') return;
+    const hand = results.multiHandLandmarks && results.multiHandLandmarks[0];
+    if (!hand) {
+      $('cameraLed').classList.remove('found');
+      $('handReticle').classList.remove('found');
+      $('cameraText').textContent = '小手在哪里？';
+      if (phase === 'ready') readyStatus.textContent = '把一只手掌放到摄像头前面 ✋';
+      return;
+    }
+    gotHand = true;
+    const x = 1 - hand[9].x; // Mirror the front camera so it behaves like a real mirror.
+    const y = hand[9].y;
+    targetX = WARP((x - .14) / .72, .10, .90);
+    $('cameraLed').classList.add('found');
+    $('handReticle').classList.add('found');
+    $('cameraText').textContent = '找到小手啦！';
+    $('handReticle').style.left = `${WARP(x*100,10,90)}%`;
+    $('handReticle').style.top = `${WARP(y*100,15,85)}%`;
+    if (phase === 'ready') {
+      if (!resumeExisting) resetGame();
+      resumeExisting = false;
+      setPhase('running');
+      showToast('识别成功！左右移动小手 🚗', 2.2);
+      note(700,.13,'sine',.036); note(900,.16,'sine',.036,.12);
+    }
+  }
+
+  function startAnotherRound() {
+    resetGame();
+    if (mode === 'gesture' && !trackingActive) { beginGesture(); return; }
+    setPhase('running');
+    showToast('出发！再来一次 🌈');
+  }
+
+  function goHome() {
+    stopGesture();
+    mode = 'touch';
+    resetGame();
+    resumeExisting = false;
+    setPhase('start');
+    $('startHint').textContent = '手势模式需要允许摄像头；画面只在本机识别，不上传。';
+  }
+
+  function pauseOrResume() {
+    if (phase === 'running') setPhase('paused');
+    else if (phase === 'paused') { setPhase('running'); lastFrame = performance.now(); }
+  }
+
+  function endGame() {
+    setPhase('over');
+    if (score > best) {
+      best = score;
+      try { localStorage.setItem('tiny-car-best', String(best)); } catch (_) {}
+    }
+    $('resultScore').textContent = score;
+    $('resultStars').textContent = stars;
+    $('resultBest').textContent = best;
+    $('overTitle').textContent = score > 140 ? '哇！你是开车小高手！' : '玩得真棒！';
+    note(560,.15,'sine',.03); note(700,.18,'sine',.03,.18); note(850,.28,'sine',.03,.36);
+  }
+
+  function carDimensions() { return {width:WARP(w*.129,43,61),height:WARP(w*.20,65,90)}; }
+  function carCenterY() {return h*.76;}
+  function carCenterX() {return road.left + carX*road.width;}
+  function laneX(lane) {return road.left + (lane + .5)*road.width/3;}
+
+  function spawnRow() {
+    const hazardLane = Math.floor(rand(0,3));
+    const kinds = ['cone','box','puddle'];
+    const kind = kinds[Math.floor(rand(0,kinds.length))];
+    objects.push({kind,lane:hazardLane,y:-90,used:false});
+    if (Math.random() < .77) {
+      let starLane = Math.floor(rand(0,2));
+      if (starLane >= hazardLane) starLane++;
+      objects.push({kind:'star',lane:starLane,y:-92,used:false,spin:rand(0,6.28)});
+    }
+  }
+
+  function createBurst(x,y,color,count=12) {
+    for (let i=0;i<count;i++) {
+      const a = rand(0,Math.PI*2), speed = rand(55,155);
+      effects.push({x,y,vx:Math.cos(a)*speed,vy:Math.sin(a)*speed - 30,ttl:rand(.4,.8),life:0,r:rand(2,5),color});
+    }
+  }
+
+  function update(dt) {
+    if (phase !== 'running') return;
+    totalTime += dt;
+    invincible = Math.max(0,invincible-dt);
+    const speed = Math.min(310,175 + totalTime*4);
+    const keyboardMove = (Number(moveRight) - Number(moveLeft));
+    if (keyboardMove) targetX = WARP(targetX+keyboardMove*.92*dt,.10,.90);
+    carX = mix(carX,targetX,Math.min(1,dt*TURN_RATE));
+    tickDistance += dt * (speed/18);
+    if (tickDistance >= 1) { const add = Math.floor(tickDistance); score += add; tickDistance -= add; refreshHUD(); }
+    spawnTimer -= dt;
+    if (spawnTimer <= 0) {
+      spawnRow();
+      spawnTimer = rand(Math.max(.78,1.24 - totalTime*.006),Math.max(1.12,1.62-totalTime*.007));
+    }
+    const playerY = carCenterY(), playerX = carCenterX(), car = carDimensions();
+    for (const obj of objects) {
+      obj.y += speed*dt;
+      if (obj.used) continue;
+      const ox = laneX(obj.lane), dy = Math.abs(obj.y-playerY), dx = Math.abs(ox-playerX);
+      if (obj.kind === 'star') {
+        if (dx < car.width*.48+13 && dy < car.height*.40+13) {
+          obj.used = true; stars++; score += 12; refreshHUD(); playStarSound();
+          createBurst(ox,obj.y,'#ffcf45',16);
+          showToast(['星星到手！ ⭐','太棒啦！ 🌟','叮！闪闪星星 ✨'][Math.floor(rand(0,3))],.8);
+        }
+      } else if (invincible <= 0 && dx < car.width*.36+18 && dy < car.height*.35+16) {
+        obj.used = true;
+        invincible = 1.55;
+        lives--; refreshHUD();
+        playHitSound();
+        if ('vibrate' in navigator) { try {navigator.vibrate(65);} catch(_){} }
+        createBurst(playerX,playerY,'#f69c61',20);
+        if (lives <= 0) {endGame();return;}
+        showToast('哎呀！还有机会，加油 ❤️',1.4);
+      }
+    }
+    objects = objects.filter(obj => !obj.used && obj.y < h+95);
+    for (const p of effects) {p.life+=dt;p.x+=p.vx*dt;p.y+=p.vy*dt;p.vy+=190*dt;}
+    effects = effects.filter(p => p.life < p.ttl);
+  }
+
+  function rr(x,y,width,height,r,fill,stroke=null,lineWidth=1) {
+    const rad = Math.max(0,Math.min(r,width/2,height/2));
+    ctx.beginPath();ctx.moveTo(x+rad,y);
+    ctx.arcTo(x+width,y,x+width,y+height,rad);
+    ctx.arcTo(x+width,y+height,x,y+height,rad);
+    ctx.arcTo(x,y+height,x,y,rad);
+    ctx.arcTo(x,y,x+width,y,rad);
+    ctx.closePath();
+    if (fill) {ctx.fillStyle=fill;ctx.fill();}
+    if (stroke) {ctx.strokeStyle=stroke;ctx.lineWidth=lineWidth;ctx.stroke();}
+  }
+  function circ(x,y,r,color){ctx.beginPath();ctx.arc(x,y,r,0,Math.PI*2);ctx.fillStyle=color;ctx.fill();}
+  function line(x1,y1,x2,y2,color,width){ctx.beginPath();ctx.moveTo(x1,y1);ctx.lineTo(x2,y2);ctx.lineWidth=width;ctx.strokeStyle=color;ctx.lineCap='round';ctx.stroke();}
+
+  function drawFlower(x,y,s=1) {
+    for (let i=0;i<5;i++) {const a=i*Math.PI*2/5;circ(x+Math.cos(a)*7*s,y+Math.sin(a)*7*s,4*s,'#fff5fc');}
+    circ(x,y,4*s,'#ffbb3c');
+  }
+  function drawTree(x,y,s=1) {
+    ctx.fillStyle='#a86d49'; rr(x-4*s,y+4*s,8*s,15*s,3*s,'#a86d49');
+    circ(x,y,13*s,'#329965');circ(x-8*s,y+3*s,10*s,'#41b875');circ(x+8*s,y+2*s,9*s,'#5bca83');
+    circ(x-3*s,y-6*s,4*s,'#8ada8e');
+  }
+  function drawTrack(t) {
+    const bg = ctx.createLinearGradient(0,0,0,h); bg.addColorStop(0,'#baf2d0');bg.addColorStop(1,'#84dba1');
+    ctx.fillStyle=bg;ctx.fillRect(0,0,w,h);
+    const stride = 130, v = (t*.37)%stride;
+    for (let n=-2;n<Math.ceil(h/stride)+2;n++) {
+      const y = n*stride+v;
+      drawTree(road.left*.49+Math.sin(n*11)*9,y+24,.72);
+      drawTree(w-road.left*.45+Math.cos(n*14)*8,y+96,.63);
+      drawFlower(road.left*.80, y+82,.66);
+      drawFlower(w-road.left*.76,y+26,.58);
+      circ(road.left*.38,y+115,2.5,'#f9eed2');
+    }
+    rr(road.left-9,-10,road.width+18,h+20,5,'#f8fbff');
+    rr(road.left-4,-10,road.width+8,h+20,4,'#668ba7');
+    rr(road.left,-10,road.width,h+20,0,'#4e637a');
+    // Road stripes and gentle center highlight.
+    ctx.fillStyle='rgba(255,255,255,.045)';ctx.fillRect(road.left+road.width*.10,0,road.width*.80,h);
+    ctx.fillStyle='#fbdc68';ctx.fillRect(road.left+6,0,5,h);ctx.fillRect(road.right-11,0,5,h);
+    const dash = 65, offset = (t*1.10)%dash;
+    for (let y=-dash+offset;y<h+dash;y+=dash) {
+      for (let j=1;j<3;j++) rr(road.left+j*road.width/3-2,y,4,30,2,'#e2f0fb');
+    }
+    // Tiny road-edge dots to make forward motion feel faster.
+    for (let y=(t*1.6)%52-52;y<h+52;y+=52) {
+      circ(road.left+9,y,2,'#fff2a3');circ(road.right-9,y,2,'#fff2a3');
+    }
+  }
+
+  function drawStarShape(x,y,outer=19,inner=9,spin=0) {
+    ctx.beginPath();
+    for (let k=0;k<10;k++) {
+      const r=k%2===0?outer:inner, a=-Math.PI/2+spin+k*Math.PI/5;
+      const px=x+Math.cos(a)*r,py=y+Math.sin(a)*r;
+      if (!k) ctx.moveTo(px,py); else ctx.lineTo(px,py);
+    }
+    ctx.closePath();ctx.fillStyle='#ffd44f';ctx.fill();ctx.lineWidth=3;ctx.strokeStyle='#ffad36';ctx.stroke();
+    circ(x-5,y-3,2.2,'#75511b');circ(x+5,y-3,2.2,'#75511b');
+    ctx.beginPath();ctx.arc(x,y+2,5,.12,Math.PI-.12);ctx.strokeStyle='#75511b';ctx.lineWidth=1.5;ctx.stroke();
+  }
+
+  function drawCone(x,y,size) {
+    ctx.save();ctx.translate(x,y);ctx.scale(size,size);
+    ctx.fillStyle='rgba(19,38,60,.20)';ctx.beginPath();ctx.ellipse(0,21,23,7,0,0,2*Math.PI);ctx.fill();
+    rr(-21,12,42,12,5,'#cf6a3f');rr(-19,10,38,9,4,'#ffa74c');
+    ctx.beginPath();ctx.moveTo(0,-25);ctx.lineTo(16,13);ctx.lineTo(-16,13);ctx.closePath();ctx.fillStyle='#ff832d';ctx.fill();
+    ctx.beginPath();ctx.moveTo(-8,-4);ctx.lineTo(8,-4);ctx.lineTo(11,3);ctx.lineTo(-11,3);ctx.closePath();ctx.fillStyle='#fff8e4';ctx.fill();
+    rr(-4,-20,8,5,2,'#ffca63');ctx.restore();
+  }
+
+  function drawBox(x,y,size) {
+    ctx.save();ctx.translate(x,y);ctx.scale(size,size);
+    rr(-24,-22,48,46,8,'#fef3de','#d9675b',4);
+    rr(-20,-18,40,37,5,'#fb6b67');
+    ctx.save();ctx.beginPath();ctx.rect(-20,-18,40,37);ctx.clip();
+    for (let i=-52;i<52;i+=21) {
+      ctx.beginPath();ctx.moveTo(i,-21);ctx.lineTo(i+36,22);ctx.lineWidth=10;ctx.strokeStyle='#fff8f2';ctx.stroke();
+    }
+    ctx.restore();
+    rr(-24,-22,48,46,8,null,'#be5547',3);
+    ctx.restore();
+  }
+
+  function drawPuddle(x,y,size) {
+    ctx.save();ctx.translate(x,y);ctx.scale(size,size);
+    ctx.beginPath();ctx.moveTo(-26,-5);ctx.bezierCurveTo(-23,-24,1,-18,7,-17);ctx.bezierCurveTo(25,-19,31,-3,25,12);ctx.bezierCurveTo(10,25,-5,14,-17,19);ctx.bezierCurveTo(-34,12,-33,2,-26,-5);ctx.closePath();
+    ctx.fillStyle='#288fca';ctx.fill();ctx.lineWidth=3;ctx.strokeStyle='#7bd6ff';ctx.stroke();
+    ctx.beginPath();ctx.ellipse(-5,-5,12,5,-.15,0,Math.PI*1.3);ctx.lineWidth=3;ctx.strokeStyle='rgba(230,255,255,.8)';ctx.stroke();
+    circ(14,9,3,'#e1fbff');ctx.restore();
+  }
+
+  function drawCar(x,y) {
+    const car = carDimensions();
+    if (invincible > 0 && Math.floor(invincible*11)%2===0) ctx.globalAlpha=.40;
+    ctx.save();ctx.translate(x,y);
+    const cw=car.width,ch=car.height;
+    ctx.fillStyle='rgba(23,39,57,.28)';ctx.beginPath();ctx.ellipse(4,ch*.45,cw*.59,14,0,0,Math.PI*2);ctx.fill();
+    rr(-cw*.61,-ch*.31,cw*.18,ch*.25,3,'#263349');
+    rr(cw*.43,-ch*.31,cw*.18,ch*.25,3,'#263349');
+    rr(-cw*.61,ch*.15,cw*.18,ch*.25,3,'#263349');
+    rr(cw*.43,ch*.15,cw*.18,ch*.25,3,'#263349');
+    rr(-cw*.5,-ch*.5,cw,ch,13,'#e9544d','#ab2e3d',3);
+    rr(-cw*.37,-ch*.39,cw*.74,ch*.28,9,'#f8b7a2');
+    rr(-cw*.37,-ch*.30,cw*.74,ch*.19,7,'#9ceeff');
+    rr(-cw*.35,ch*.14,cw*.70,ch*.22,6,'#c93d43');
+    rr(-cw*.31,ch*.21,cw*.62,ch*.095,5,'#f9af97');
+    // Little headlights at the top.
+    rr(-cw*.39,-ch*.47,cw*.21,7,3,'#fff7c0');
+    rr(cw*.18,-ch*.47,cw*.21,7,3,'#fff7c0');
+    // Friendly little face.
+    circ(-cw*.16,-ch*.02,2.7,'#5c3a3e');circ(cw*.16,-ch*.02,2.7,'#5c3a3e');
+    ctx.beginPath();ctx.arc(0,ch*.015,cw*.16,.1,Math.PI-.1);ctx.lineWidth=2;ctx.strokeStyle='#703a42';ctx.stroke();
+    rr(-cw*.31,ch*.40,cw*.17,5,2,'#ffb5a4');rr(cw*.14,ch*.40,cw*.17,5,2,'#ffb5a4');
+    ctx.restore();ctx.globalAlpha=1;
+  }
+
+  function render() {
+    ctx.setTransform(dpi,0,0,dpi,0,0);
+    ctx.clearRect(0,0,w,h);
+    drawTrack(visualTime);
+    for (const obj of objects) {
+      if (obj.used) continue;
+      const x = laneX(obj.lane), y = obj.y, s = WARP(w/390,.82,1.15);
+      if (obj.kind === 'cone') drawCone(x,y,s);
+      else if (obj.kind === 'box') drawBox(x,y,s);
+      else if (obj.kind === 'puddle') drawPuddle(x,y,s);
+      else if (obj.kind === 'star') {
+        const bob = prefersReducedMotion?0:Math.sin(visualTime*.025+obj.spin)*3;
+        drawStarShape(x,y+bob,18*s,8*s,prefersReducedMotion?0:Math.sin(visualTime*.006)*.12);
+      }
+    }
+    if (phase !== 'start') drawCar(carCenterX(),carCenterY());
+    else drawCar(road.left+road.width*.5,carCenterY());
+    for (const part of effects) {
+      ctx.globalAlpha=Math.max(0,1-part.life/part.ttl);
+      circ(part.x,part.y,part.r,part.color);
+    }
+    ctx.globalAlpha=1;
+  }
+
+  function loop(now) {
+    const dt = Math.min((now-lastFrame)/1000,.05);
+    lastFrame = now;
+    if (phase === 'running') visualTime += dt*190;
+    else if (phase === 'start' || phase === 'ready') visualTime += dt*30;
+    update(dt);
+    render();
+    requestAnimationFrame(loop);
+  }
+
+  function steerPointer(e) {
+    if (phase !== 'running' && phase !== 'ready') return;
+    const rect = canvas.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    targetX = WARP((x - road.left)/road.width,.10,.90);
+    if (e.cancelable) e.preventDefault();
+  }
+
+  // Controls are always available as a fallback if hand tracking loses sight of the child.
+  canvas.addEventListener('pointerdown', event => {
+    if (event.pointerType !== 'mouse' || event.buttons) {
+      try { canvas.setPointerCapture(event.pointerId); } catch (_) {}
+    }
+    steerPointer(event);
+  });
+  canvas.addEventListener('pointermove', event => {
+    if (event.pointerType === 'mouse' && !(event.buttons & 1)) return;
+    steerPointer(event);
+  });
+  document.addEventListener('keydown', event => {
+    if (event.key === 'ArrowLeft' || event.key.toLowerCase() === 'a') {moveLeft=true;event.preventDefault();}
+    if (event.key === 'ArrowRight' || event.key.toLowerCase() === 'd') {moveRight=true;event.preventDefault();}
+    if (event.key === ' ' && (phase==='running'||phase==='paused')) {pauseOrResume();event.preventDefault();}
+  });
+  document.addEventListener('keyup', event => {
+    if (event.key === 'ArrowLeft' || event.key.toLowerCase() === 'a') moveLeft=false;
+    if (event.key === 'ArrowRight' || event.key.toLowerCase() === 'd') moveRight=false;
+  });
+  document.addEventListener('visibilitychange', () => {if (document.hidden && phase === 'running')setPhase('paused');});
+  window.addEventListener('blur', () => {moveLeft=false;moveRight=false;});
+
+  $('gestureStart').addEventListener('click',()=>beginGesture(false));
+  $('touchStart').addEventListener('click',beginTouch);
+  $('readyTouch').addEventListener('click',beginTouch);
+  $('pauseButton').addEventListener('click',pauseOrResume);
+  $('resumeButton').addEventListener('click',pauseOrResume);
+  $('replayButton').addEventListener('click',startAnotherRound);
+  $('homeButton').addEventListener('click',goHome);
+  $('changeMode').addEventListener('click', () => {
+    if (mode === 'gesture') beginTouch();
+    else beginGesture(true);
+  });
+  $('soundButton').addEventListener('click', () => {
+    soundOn=!soundOn; $('soundButton').textContent=soundOn?'🔊':'🔇';
+    $('soundButton').setAttribute('aria-label',soundOn?'关闭声音':'打开声音');
+    if (soundOn){initAudio();note(900,.13);}
+  });
+
+  if ('ResizeObserver' in window) new ResizeObserver(resize).observe(shell);
+  else window.addEventListener('resize',resize);
+  resize();
+  setPhase('start');
+  requestAnimationFrame(loop);
+})();
+
+</script>
+</body>
+</html>
