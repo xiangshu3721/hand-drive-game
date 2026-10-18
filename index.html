@@ -2,6 +2,7 @@
 <html lang="zh-CN">
 <head>
   <meta charset="UTF-8" />
+  <meta name="game-version" content="2.0" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no" />
   <meta name="theme-color" content="#85d6ff" />
   <meta name="description" content="手掌动一动，小汽车躲障碍！适合儿童的免费 H5 手势小游戏。" />
@@ -19,7 +20,12 @@ button:focus-visible {outline:3px solid #0c6ced;outline-offset:3px}
 .hud-left,.hud-right{display:flex;align-items:center;gap:6px}.hud-pill{min-height:36px;display:flex;align-items:center;justify-content:center;padding:6px 10px;border:2px solid rgba(255,255,255,.9);border-radius:16px;background:rgba(255,255,255,.91);font-size:16px;font-weight:900;box-shadow:0 4px 0 rgba(50,88,102,.15);white-space:nowrap}
 .heart-pill{font-size:14px;letter-spacing:-3px;padding-right:13px}.star-pill{color:#ed8b12}.distance-pill{color:#3458aa}.circle-btn{pointer-events:auto;display:grid;place-items:center;width:36px;height:36px;border-radius:14px;background:#fff;border:2px solid #fff;box-shadow:0 4px 0 rgba(50,88,102,.15);font-size:17px}.circle-btn:disabled{opacity:.6}
 .top-caption{position:absolute;top:calc(58px + env(safe-area-inset-top,0px));left:50%;transform:translateX(-50%);width:max-content;max-width:90%;border-radius:999px;background:rgba(255,255,255,.88);box-shadow:0 2px 7px rgba(37,74,110,.09);padding:5px 11px;text-align:center;font-size:11px;font-weight:800;color:#326286;letter-spacing:.15px;z-index:2;pointer-events:none}.top-caption span{font-weight:600}
-.camera-widget{position:absolute;z-index:5;bottom:calc(49px + env(safe-area-inset-bottom,0px));right:12px;width:114px;border:3px solid white;border-radius:18px;overflow:hidden;background:#27364c;box-shadow:0 5px 18px #173e5860;pointer-events:none}.camera-heading{background:#fff;display:flex;align-items:center;justify-content:center;gap:6px;font-size:9px;font-weight:900;height:25px;padding:0 4px;white-space:nowrap}.camera-led{width:8px;height:8px;flex:none;border-radius:50%;background:#ffbd4f}.camera-led.found{background:#35ce6c;box-shadow:0 0 0 2px #b9ffc8}.camera-image-wrap{position:relative;height:86px;background:#172a38}.camera-image-wrap video{display:block;width:100%;height:100%;object-fit:cover;transform:scaleX(-1)}.hand-reticle{position:absolute;left:50%;top:50%;font-size:25px;transform:translate(-50%,-50%);filter:drop-shadow(0 1px 3px black);opacity:.6;transition:opacity .1s}.hand-reticle.found{opacity:1}
+.camera-source{position:absolute!important;width:1px!important;height:1px!important;left:-10px;top:-10px;opacity:0;pointer-events:none}
+.gesture-status{position:absolute;z-index:4;left:50%;bottom:calc(72px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);padding:9px 14px;background:rgba(255,255,255,.95);border:2px solid #fff;border-radius:999px;white-space:nowrap;font-size:13px;font-weight:900;box-shadow:0 5px 16px #21465e25;pointer-events:none;color:#37668c}
+.gesture-status.fast{color:#df602c;background:#fff3dd}.gesture-status.slow{color:#249b8b;background:#eafff5}.gesture-status.lost{color:#6f8494}
+.speed-controls{position:absolute;z-index:5;right:12px;bottom:calc(88px + env(safe-area-inset-bottom,0px));display:grid;gap:8px}
+.speed-key{font-size:12px;font-weight:900;border-radius:13px;padding:10px 8px;min-width:88px;border:2px solid #fff;background:#fff9e7;box-shadow:0 3px 0 #36687835;color:#54718a;touch-action:none;user-select:none}
+.speed-key.pressed{transform:translateY(3px);box-shadow:0 1px 0 #36687835}.speed-fast.pressed{background:#ffe5bb;color:#d66331}.speed-slow.pressed{background:#c9f6e8;color:#248678}
 .play-tip{position:absolute;z-index:3;bottom:calc(17px + env(safe-area-inset-bottom,0px));left:50%;transform:translateX(-50%);background:rgba(255,255,255,.9);border-radius:15px;padding:9px 13px;font-size:12px;font-weight:800;white-space:nowrap;box-shadow:0 5px 12px #21465e25;pointer-events:none}
 .change-mode{position:absolute;z-index:6;left:12px;bottom:calc(20px + env(safe-area-inset-bottom,0px));padding:7px 9px;border-radius:13px;background:#fff;box-shadow:0 4px 0 #19415a30;color:#296296;font-size:12px;font-weight:800}
 .overlay{position:absolute;z-index:10;inset:0;display:flex;align-items:center;justify-content:center;padding:18px 20px;background:linear-gradient(155deg,rgba(159,228,255,.93) 1%,rgba(197,244,214,.93) 85%);text-align:center;overflow-y:auto;overscroll-behavior:contain}
@@ -28,15 +34,29 @@ button:focus-visible {outline:3px solid #0c6ced;outline-offset:3px}
 .dialog-card{padding:25px 20px 24px;max-width:360px}.dialog-card h2{font-size:clamp(22px,6vw,28px);color:#27476c;font-weight:1000;margin-bottom:8px}.dialog-card p{font-size:14px;line-height:1.6;color:#78919d;margin-bottom:18px}.ready-icon,.big-emoji{font-size:65px;margin-bottom:10px}.ready-icon{animation:wave 1.3s ease-in-out infinite}.loading-line{padding:12px;margin-bottom:8px;background:#e5f5ff;border-radius:13px;font-size:13px;color:#306bb4;font-weight:800}.small-card{max-width:300px}.end-card .big-emoji{margin:0 0 8px}.result-row{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin:15px 0 21px}.result-row>div{border-radius:15px;background:#eff7ff;padding:12px 3px}.result-row small{display:block;font-size:10px;color:#6b879d;font-weight:800}.result-row strong{display:block;font-size:21px;color:#2b65ab;margin-top:5px}
 .toast{position:absolute;z-index:50;left:50%;bottom:calc(155px + env(safe-area-inset-bottom,0px));transform:translate(-50%,10px);pointer-events:none;opacity:0;background:#243b5de3;color:#fff;border-radius:999px;padding:10px 18px;font-weight:900;font-size:13px;max-width:90%;text-align:center;transition:opacity .25s,transform .25s}.toast.show{opacity:1;transform:translate(-50%,0)}
 @keyframes wave{0%,100%{transform:rotate(-12deg)}50%{transform:rotate(13deg)}}@keyframes spin{to{transform:rotate(360deg)}}
-@media (min-width:540px){.game-shell{height:min(96dvh,920px);border:7px solid rgba(255,255,255,.95);border-radius:34px}.hud{padding-top:12px}.top-caption{top:58px}.camera-widget{bottom:49px}.play-tip{bottom:17px}.change-mode{bottom:20px}}
+@media (min-width:540px){.game-shell{height:min(96dvh,920px);border:7px solid rgba(255,255,255,.95);border-radius:34px}.hud{padding-top:12px}.top-caption{top:58px}.play-tip{bottom:17px}.change-mode{bottom:20px}}
 @media (max-height:610px){.intro-card{padding:10px 16px 14px;border-radius:22px}.hero-road{width:75px;height:75px;border-radius:20px}.hero-car{font-size:44px;top:13px}.hero-star{font-size:20px}.intro-kicker{font-size:10px}.intro-lead{font-size:12px;line-height:1.35}.step-chips{margin:8px 0 10px}.step-chips span{font-size:10px;padding:4px 7px}.big-button{min-height:41px;font-size:14px;padding:9px}.start-hint{margin-top:10px;font-size:10px}h1{font-size:27px;margin:3px 0}.dialog-card{padding:15px}.dialog-card p{margin-bottom:9px}}
 @media (prefers-reduced-motion:reduce){.ready-icon,.hero-star{animation:none}*{scroll-behavior:auto}}
 
-/* When teaching the camera gesture, keep the live mirrored preview visible above the overlay. */
-.game-shell.is-ready .camera-widget{z-index:15;bottom:calc(10px + env(safe-area-inset-bottom,0px));right:50%;transform:translateX(50%);width:126px}
-.game-shell.is-ready .camera-image-wrap{height:88px}
-.game-shell.is-ready .ready-card{transform:translateY(-61px)}
-@media (max-height:490px){.game-shell.is-ready .ready-card{transform:translateY(-44px);padding:10px}.game-shell.is-ready .ready-icon{font-size:35px;margin-bottom:0}.game-shell.is-ready .ready-card p{font-size:12px}.game-shell.is-ready .camera-image-wrap{height:60px}}
+/* 历史记录和儿童手势说明 */
+.saved-summary{font-size:12px;font-weight:900;color:#3a7197;padding:7px 9px;margin:8px auto 8px;border-radius:13px;background:#e9f7ff;display:flex;align-items:center;justify-content:center;gap:13px}
+.saved-summary span{color:#6a7a96}.saved-summary b{color:#ed9d20;font-size:16px}
+.history-link{border:0;background:transparent;color:#3776aa;font-size:13px;font-weight:850;padding:10px 8px;display:block;width:100%;margin-top:7px;text-decoration:underline;text-underline-offset:3px}
+.gesture-guide{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:8px 0 14px}
+.gesture-guide span{display:flex;flex-direction:column;gap:4px;align-items:center;background:#eaf7ff;border-radius:12px;padding:10px 3px;font-size:29px}
+.gesture-guide b{font-size:12px;color:#426b8b}
+.total-reward{font-size:14px;font-weight:850;color:#c57d24;margin-bottom:14px}.total-reward strong{font-size:21px}
+.history-card{max-height:min(90dvh,840px);overflow-y:auto;max-width:400px;padding:22px 17px}
+.history-heading{font-size:24px;font-weight:1000;color:#29557b}
+.history-description{margin:9px 0 12px!important;font-size:12px!important}
+.history-summary{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-bottom:12px}
+.history-summary>div{background:#eaf5ff;padding:10px 3px;border-radius:12px}.history-summary small{display:block;font-size:10px;color:#7292a4;font-weight:800}.history-summary strong{display:block;margin-top:5px;font-size:21px;color:#3169a3}
+.history-list{display:grid;gap:7px;min-height:48px;max-height:32dvh;overflow-y:auto;padding:3px 2px;margin-bottom:14px}
+.history-item{border-radius:13px;background:#fff;border:1px solid #e6edf0;padding:9px 10px;display:flex;align-items:center;justify-content:space-between;gap:9px;text-align:left}
+.history-item small{display:block;color:#8697a5;font-size:10px;margin-top:3px}.history-item b{color:#42688e;font-size:14px}.history-item .history-stars{font-size:13px;color:#d68a17;font-weight:900;white-space:nowrap}
+.history-empty{padding:20px 8px;font-size:13px;color:#8598a8}
+@media(max-height:680px){.history-card{padding:13px}.history-list{max-height:25dvh}.saved-summary{margin:5px auto}.history-link{padding:6px 4px}}
+@media(max-width:370px){.speed-key{min-width:78px;font-size:11px;padding:8px 5px}.hud-pill{padding:5px 7px;font-size:14px}.top-caption{font-size:10px}}
 
 </style>
 </head>
@@ -56,16 +76,15 @@ button:focus-visible {outline:3px solid #0c6ced;outline-offset:3px}
       </div>
     </section>
 
-    <div class="top-caption">🚙 小手开车车 <span>· 避开障碍，接住星星！</span></div>
+    <div class="top-caption">🚙 小手开车车 <span>· 🌟 累计 <b id="totalStarDisplay">0</b></span></div>
 
-    <section class="camera-widget" id="cameraWidget" hidden aria-label="摄像头手势识别预览">
-      <div class="camera-heading"><span class="camera-led" id="cameraLed"></span><span id="cameraText">正在寻找小手…</span></div>
-      <div class="camera-image-wrap">
-        <video id="cameraVideo" playsinline autoplay muted></video>
-        <div class="hand-reticle" id="handReticle">✋</div>
-      </div>
-    </section>
-
+    <!-- 摄像头画面仅供本机手势识别，不在界面中展示。 -->
+    <video class="camera-source" id="cameraVideo" playsinline autoplay muted aria-hidden="true"></video>
+    <div class="gesture-status" id="gestureStatus" hidden aria-live="polite">✋ 正常速度</div>
+    <div class="speed-controls" id="speedControls" hidden aria-label="速度控制">
+      <button id="speedFast" class="speed-key speed-fast" aria-label="按住加速">🚀 按住加速</button>
+      <button id="speedSlow" class="speed-key speed-slow" aria-label="按住减速">🐢 按住减速</button>
+    </div>
     <div class="play-tip" id="playTip" hidden>👆 左右移动手指，控制汽车</div>
     <button class="change-mode" id="changeMode" hidden>↔ 切换操控</button>
 
@@ -77,9 +96,11 @@ button:focus-visible {outline:3px solid #0c6ced;outline-offset:3px}
         <div class="intro-kicker">送给小朋友的汽车游戏</div>
         <h1>小手开车车</h1>
         <p class="intro-lead">左一点、右一点，<br />躲开障碍，收集小星星！</p>
-        <div class="step-chips"><span>🖐️ 挥挥小手</span><span>🚧 躲避路障</span><span>⭐ 收集星星</span></div>
+        <div class="step-chips"><span>🖐️ 左右开车</span><span>✌️ 加速</span><span>✊ 减速</span></div>
+        <div class="saved-summary" id="startSummary">🌟 累计星星 <b id="startTotalStars">0</b> <span>🏆 最高 <b id="startBest">0</b></span></div>
         <button class="big-button primary" id="gestureStart">📷 用手势开车 <span class="button-arrow">→</span></button>
         <button class="big-button secondary" id="touchStart">👆 用触屏 / 鼠标玩</button>
+        <button class="history-link" id="startHistory">📖 我的游戏记录 →</button>
         <div class="start-hint" id="startHint">手势模式需要允许摄像头；画面只在本机识别，不上传。</div>
       </div>
     </div>
@@ -88,7 +109,8 @@ button:focus-visible {outline:3px solid #0c6ced;outline-offset:3px}
       <div class="dialog-card ready-card">
         <div class="ready-icon">🖐️</div>
         <h2>让摄像头看到小手</h2>
-        <p>张开一只手掌，左右移动，汽车就会跟着走！</p>
+        <p>手掌左右移动开车，变换手势就能变速！</p>
+        <div class="gesture-guide"><span>✋<b>左右移动</b></span><span>✌️<b>加速</b></span><span>✊<b>减速</b></span></div>
         <div class="loading-line" id="readyStatus" role="status">正在准备摄像头…</div>
         <button class="big-button secondary" id="readyTouch">换成触屏玩</button>
       </div>
@@ -114,7 +136,22 @@ button:focus-visible {outline:3px solid #0c6ced;outline-offset:3px}
           <div><small>最高纪录</small><strong id="resultBest">0</strong></div>
         </div>
         <button class="big-button primary" id="replayButton">🚗 再玩一次</button>
-        <button class="big-button secondary" id="homeButton">换一种操控方式</button>
+        <div class="total-reward">🌟 星星累计 <strong id="resultTotalStars">0</strong> 颗</div>
+        <button class="big-button secondary" id="overHistory">📖 查看历史记录</button>
+        <button class="history-link" id="homeButton">返回首页 / 换操控方式</button>
+      </div>
+    </div>
+    <div class="overlay hidden" id="historyOverlay">
+      <div class="dialog-card history-card">
+        <div class="history-heading">📖 我的开车日记</div>
+        <p class="history-description">成绩存在这台设备的当前浏览器里，不需要登录。</p>
+        <div class="history-summary">
+          <div><small>🌟 累计星星</small><strong id="historyTotalStars">0</strong></div>
+          <div><small>🏆 最高距离</small><strong id="historyBest">0</strong></div>
+          <div><small>🚗 完成局数</small><strong id="historyTotalRuns">0</strong></div>
+        </div>
+        <div class="history-list" id="historyList" aria-label="最近游戏记录"></div>
+        <button class="big-button primary" id="historyBack">← 返回游戏</button>
       </div>
     </div>
     <div class="toast" id="toast" role="status" aria-live="polite"></div>
@@ -130,7 +167,7 @@ button:focus-visible {outline:3px solid #0c6ced;outline-offset:3px}
   const readyStatus = $('readyStatus');
   const overlays = {
     start: $('startOverlay'), ready: $('readyOverlay'),
-    paused: $('pauseOverlay'), over: $('overOverlay')
+    paused: $('pauseOverlay'), over: $('overOverlay'), history: $('historyOverlay')
   };
   const WARP = (v, min, max) => Math.max(min, Math.min(max, v));
   const mix = (a, b, f) => a + (b - a) * f;
@@ -145,10 +182,88 @@ button:focus-visible {outline:3px solid #0c6ced;outline-offset:3px}
   let soundOn = true, audioCtx = null, toastTimer = null;
   let stream = null, handTracker = null, trackingTimer = null, trackingActive = false;
   let session = 0, loadPromise = null, loadRoot = assetRoot, gotHand = false;
-  let moveLeft = false, moveRight = false, gestureReady = false, resumeExisting = false;
+  let moveLeft = false, moveRight = false, moveFast = false, moveSlow = false;
+  let touchFast = false, touchSlow = false, resumeExisting = false;
+  let speedMode = 'normal', lastGestureSeen = 0, pendingGesture = 'normal', pendingSince = 0;
+  let historyReturnPhase = 'start', currentRoundStored = false;
+  const STORAGE_KEY = 'tiny-car-progress-v2';
+  const MAX_HISTORY = 80;
+  const defaultProgress = () => ({version:2,totalStars:0,best:0,totalRuns:0,runs:[]});
+  let progress = defaultProgress();
   const prefersReducedMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  try { best = Number(localStorage.getItem('tiny-car-best') || 0) || 0; } catch (_) {}
+  function safeNum(value) { return Number.isSafeInteger(value) && value >= 0 ? value : 0; }
+  function loadProgress() {
+    try {
+      const saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || 'null');
+      if (saved && saved.version === 2 && Array.isArray(saved.runs)) {
+        progress = {
+          version:2, totalStars:safeNum(saved.totalStars), best:safeNum(saved.best),
+          totalRuns:safeNum(saved.totalRuns),
+          runs:saved.runs.slice(0,MAX_HISTORY).filter(x => x && typeof x === 'object').map(x => ({
+            at:typeof x.at === 'string'?x.at:'',score:safeNum(x.score),
+            stars:safeNum(x.stars),duration:safeNum(x.duration),
+            mode:x.mode === 'gesture'?'gesture':'touch'
+          }))
+        };
+      }
+      progress.best = Math.max(progress.best,safeNum(Number(localStorage.getItem('tiny-car-best'))));
+    } catch (_) {progress = defaultProgress();}
+    best = progress.best;
+  }
+  function saveProgress() {
+    try {
+      localStorage.setItem(STORAGE_KEY,JSON.stringify(progress));
+      localStorage.setItem('tiny-car-best',String(progress.best));
+    } catch (_) { /* Private mode / full storage: game remains playable. */ }
+  }
+  loadProgress();
+
+  function refreshProgress() {
+    $('totalStarDisplay').textContent = progress.totalStars;
+    $('startTotalStars').textContent = progress.totalStars;
+    $('startBest').textContent = progress.best;
+    $('resultTotalStars').textContent = progress.totalStars;
+  }
+  function formatGameDate(at) {
+    const d = new Date(at);
+    return Number.isNaN(d.getTime()) ? '未知日期' : d.toLocaleString('zh-CN',{
+      month:'numeric',day:'numeric',hour:'2-digit',minute:'2-digit'
+    });
+  }
+  function renderHistory() {
+    $('historyTotalStars').textContent = progress.totalStars;
+    $('historyBest').textContent = progress.best;
+    $('historyTotalRuns').textContent = progress.totalRuns;
+    const list = $('historyList');
+    list.replaceChildren();
+    if (!progress.runs.length) {
+      const el = document.createElement('div');
+      el.className = 'history-empty';
+      el.textContent = '还没有完整的游戏记录，先开一局吧！🚗';
+      list.appendChild(el);
+      return;
+    }
+    progress.runs.forEach((run,index) => {
+      const row = document.createElement('div');row.className = 'history-item';
+      const left = document.createElement('div');
+      const title = document.createElement('b');
+      title.textContent = `第 ${progress.totalRuns - index} 局 · 🏁 ${run.score}`;
+      const meta = document.createElement('small');
+      meta.textContent = `${formatGameDate(run.at)} · ${run.mode==='gesture'?'🖐️ 手势':'👆 触控'}`;
+      const star = document.createElement('div');star.className = 'history-stars';
+      star.textContent = `⭐ +${run.stars}`;
+      left.append(title,meta);row.append(left,star);list.appendChild(row);
+    });
+  }
+  function openHistory() {
+    if (!['start','over','paused'].includes(phase)) return;
+    historyReturnPhase = phase;
+    renderHistory();
+    setPhase('history');
+  }
+  function closeHistory() { setPhase(historyReturnPhase); }
+
 
   function setPhase(next) {
     phase = next;
@@ -157,8 +272,10 @@ button:focus-visible {outline:3px solid #0c6ced;outline-offset:3px}
     $('pauseButton').disabled = !['running', 'paused'].includes(next);
     $('pauseButton').textContent = next === 'paused' ? '▶️' : '⏸';
     $('pauseButton').setAttribute('aria-label', next === 'paused' ? '继续游戏' : '暂停游戏');
-    $('cameraWidget').hidden = !(mode === 'gesture' && ['ready','running','paused','over'].includes(next) && !!stream);
-    $('playTip').hidden = next !== 'running' || mode === 'gesture';
+    $('gestureStatus').hidden = !(mode === 'gesture' && ['running','paused'].includes(next));
+    $('speedControls').hidden = !(mode === 'touch' && next === 'running');
+    // Keep the lower playfield clear on small phones; controls are self-labelled.
+    $('playTip').hidden = true;
     $('changeMode').hidden = next !== 'running';
   }
 
@@ -175,6 +292,9 @@ button:focus-visible {outline:3px solid #0c6ced;outline-offset:3px}
 
   function resetGame() {
     totalTime = 0; score = 0; stars = 0; lives = 3; carX = .5; targetX = .5;
+    currentRoundStored = false;
+    speedMode = 'normal'; touchFast = false; touchSlow = false;
+    refreshSpeedUI();
     objects = []; effects = []; spawnTimer = .9; invincible = 0; tickDistance = 0;
     refreshHUD();
   }
@@ -184,6 +304,7 @@ button:focus-visible {outline:3px solid #0c6ced;outline-offset:3px}
     $('heartDisplay').setAttribute('aria-label', `还剩${lives}颗爱心`);
     $('starDisplay').textContent = stars;
     $('scoreDisplay').textContent = score;
+    refreshProgress();
   }
 
   function showToast(message, seconds = 1.8) {
@@ -198,12 +319,13 @@ button:focus-visible {outline:3px solid #0c6ced;outline-offset:3px}
     const previouslyStarted = phase === 'running' || (phase === 'ready' && resumeExisting);
     stopGesture();
     mode = 'touch';
-    gestureReady = false;
+    // No webcam is displayed; keep tracking source hidden.
     resumeExisting = false;
     if (!previouslyStarted) resetGame();
     setPhase('running');
     $('changeMode').textContent = '📷 手势驾驶';
-    $('playTip').textContent = '👆 手指 / 鼠标左右移动开车';
+    $('playTip').textContent = '👆 移动转向 · 按住右侧按钮变速';
+    setSpeedMode('normal');
     initAudio();
     showToast('小车出发！躲开路障吧 🚗');
   }
@@ -281,8 +403,9 @@ button:focus-visible {outline:3px solid #0c6ced;outline-offset:3px}
       try { Promise.resolve(closing.close()).catch(() => {}); } catch (_) {}
     }
     gotHand = false;
-    $('cameraWidget').hidden = true;
-    $('cameraLed').classList.remove('found');
+    lastGestureSeen = 0;
+    pendingGesture = 'normal';
+    setSpeedMode('normal');
   }
 
   async function beginGesture(fromGame = false) {
@@ -296,6 +419,7 @@ button:focus-visible {outline:3px solid #0c6ced;outline-offset:3px}
     mode = 'gesture';
     resumeExisting = fromGame;
     gotHand = false;
+    pendingGesture = 'normal'; pendingSince = 0; lastGestureSeen = 0;
     const mySession = session;
     setPhase('ready');
     $('changeMode').textContent = '👆 触控驾驶';
@@ -311,7 +435,6 @@ button:focus-visible {outline:3px solid #0c6ced;outline-offset:3px}
       video.srcObject = stream;
       await video.play();
       if (mySession !== session) return;
-      $('cameraWidget').hidden = false;
       readyStatus.textContent = '正在加载小手识别（首次需要联网）…';
       await ensureHands();
       if (mySession !== session) return;
@@ -320,7 +443,6 @@ button:focus-visible {outline:3px solid #0c6ced;outline-offset:3px}
       handTracker.onResults(onHands);
       trackingActive = true;
       readyStatus.textContent = '识别准备好了！请伸出一只手掌 ✋';
-      $('cameraText').textContent = '正在找小手…';
       trackingLoop(mySession);
     } catch (error) {
       if (mySession !== session) return;
@@ -364,30 +486,66 @@ button:focus-visible {outline:3px solid #0c6ced;outline-offset:3px}
     trackingTimer = setTimeout(() => trackingLoop(mySession), 42);
   }
 
+  const fingerExtended = (hand, tip, pip) => {
+    // Relative wrist distance is rotation independent, unlike tip.y < pip.y.
+    const distance = (a,b) => Math.hypot(a.x-b.x,a.y-b.y);
+    return distance(hand[tip],hand[0]) > distance(hand[pip],hand[0]) * 1.11;
+  };
+  function classifyGesture(hand) {
+    const fingers = [
+      fingerExtended(hand,8,6),fingerExtended(hand,12,10),
+      fingerExtended(hand,16,14),fingerExtended(hand,20,18)
+    ];
+    const extended = fingers.filter(Boolean).length;
+    if (!extended) return 'slow';       // ✊ fist: brake
+    if (fingers[0] && fingers[1] && !fingers[2] && !fingers[3]) return 'fast'; // ✌️ V
+    return 'normal';                   // ✋ open palm and all other shapes
+  }
+  function refreshSpeedUI() {
+    const label = speedMode==='fast'?'✌️ 加速冲冲冲！':speedMode==='slow'?'✊ 慢慢开':'✋ 正常速度';
+    const status = $('gestureStatus');
+    status.textContent = label;
+    status.classList.toggle('fast',speedMode==='fast');
+    status.classList.toggle('slow',speedMode==='slow');
+    $('speedFast').classList.toggle('pressed',speedMode==='fast');
+    $('speedSlow').classList.toggle('pressed',speedMode==='slow');
+  }
+  function setSpeedMode(next) {
+    if (speedMode === next) return;
+    speedMode = next;
+    refreshSpeedUI();
+  }
   function onHands(results) {
     if (mode !== 'gesture') return;
     const hand = results.multiHandLandmarks && results.multiHandLandmarks[0];
     if (!hand) {
-      $('cameraLed').classList.remove('found');
-      $('handReticle').classList.remove('found');
-      $('cameraText').textContent = '小手在哪里？';
-      if (phase === 'ready') readyStatus.textContent = '把一只手掌放到摄像头前面 ✋';
+      if (phase === 'ready') readyStatus.textContent = '把一只手放到摄像头前面 ✋';
+      // If the hand leaves view, don't stay stuck at a high speed.
+      if (lastGestureSeen && performance.now()-lastGestureSeen > 650) {
+        setSpeedMode('normal');
+        $('gestureStatus').textContent = '👀 等待小手出现…';
+        $('gestureStatus').classList.add('lost');
+        pendingGesture = 'normal';pendingSince = performance.now();
+      }
       return;
     }
     gotHand = true;
-    const x = 1 - hand[9].x; // Mirror the front camera so it behaves like a real mirror.
-    const y = hand[9].y;
+    lastGestureSeen = performance.now();
+    $('gestureStatus').classList.remove('lost');
+    const x = 1 - hand[9].x; // Mirror front-facing camera, including on iPad.
     targetX = WARP((x - .14) / .72, .10, .90);
-    $('cameraLed').classList.add('found');
-    $('handReticle').classList.add('found');
-    $('cameraText').textContent = '找到小手啦！';
-    $('handReticle').style.left = `${WARP(x*100,10,90)}%`;
-    $('handReticle').style.top = `${WARP(y*100,15,85)}%`;
+    const nextGesture = classifyGesture(hand);
+    if (nextGesture !== pendingGesture) {
+      pendingGesture = nextGesture;
+      pendingSince = performance.now();
+    } else if (nextGesture !== speedMode && performance.now() - pendingSince > 200) {
+      setSpeedMode(nextGesture);
+    }
     if (phase === 'ready') {
       if (!resumeExisting) resetGame();
       resumeExisting = false;
       setPhase('running');
-      showToast('识别成功！左右移动小手 🚗', 2.2);
+      showToast('开车啦！✋ 左右转向 · ✌️ 加速 · ✊ 减速', 3);
       note(700,.13,'sine',.036); note(900,.16,'sine',.036,.12);
     }
   }
@@ -405,7 +563,7 @@ button:focus-visible {outline:3px solid #0c6ced;outline-offset:3px}
     resetGame();
     resumeExisting = false;
     setPhase('start');
-    $('startHint').textContent = '手势模式需要允许摄像头；画面只在本机识别，不上传。';
+    $('startHint').textContent = '手势识别需要摄像头权限，但不会显示或上传你的画面。';
   }
 
   function pauseOrResume() {
@@ -414,14 +572,21 @@ button:focus-visible {outline:3px solid #0c6ced;outline-offset:3px}
   }
 
   function endGame() {
+    if (currentRoundStored) return;
+    currentRoundStored = true;
+    // Each star was already saved on collection: don't add them again here.
+    progress.best = Math.max(progress.best,score);
+    progress.totalRuns++;
+    progress.runs.unshift({at:new Date().toISOString(),score,stars,
+      duration:Math.round(totalTime),mode});
+    progress.runs = progress.runs.slice(0,MAX_HISTORY);
+    best = progress.best;
+    saveProgress();
     setPhase('over');
-    if (score > best) {
-      best = score;
-      try { localStorage.setItem('tiny-car-best', String(best)); } catch (_) {}
-    }
     $('resultScore').textContent = score;
     $('resultStars').textContent = stars;
     $('resultBest').textContent = best;
+    refreshProgress();
     $('overTitle').textContent = score > 140 ? '哇！你是开车小高手！' : '玩得真棒！';
     note(560,.15,'sine',.03); note(700,.18,'sine',.03,.18); note(850,.28,'sine',.03,.36);
   }
@@ -454,7 +619,11 @@ button:focus-visible {outline:3px solid #0c6ced;outline-offset:3px}
     if (phase !== 'running') return;
     totalTime += dt;
     invincible = Math.max(0,invincible-dt);
-    const speed = Math.min(310,175 + totalTime*4);
+    if (mode === 'touch') setSpeedMode((touchFast||moveFast)?'fast':(touchSlow||moveSlow)?'slow':'normal');
+    else if (lastGestureSeen && performance.now()-lastGestureSeen > 850) setSpeedMode('normal');
+    const baseSpeed = Math.min(310,175 + totalTime*4);
+    const factor = speedMode === 'fast' ? 1.6 : speedMode === 'slow' ? .58 : 1;
+    const speed = baseSpeed * factor;
     const keyboardMove = (Number(moveRight) - Number(moveLeft));
     if (keyboardMove) targetX = WARP(targetX+keyboardMove*.92*dt,.10,.90);
     carX = mix(carX,targetX,Math.min(1,dt*TURN_RATE));
@@ -463,7 +632,8 @@ button:focus-visible {outline:3px solid #0c6ced;outline-offset:3px}
     spawnTimer -= dt;
     if (spawnTimer <= 0) {
       spawnRow();
-      spawnTimer = rand(Math.max(.78,1.24 - totalTime*.006),Math.max(1.12,1.62-totalTime*.007));
+      // Maintain obstacle spacing as speed changes: braking stays gentle, boosting stays challenging.
+      spawnTimer = rand(Math.max(.78,1.24 - totalTime*.006),Math.max(1.12,1.62-totalTime*.007)) / factor;
     }
     const playerY = carCenterY(), playerX = carCenterX(), car = carDimensions();
     for (const obj of objects) {
@@ -472,7 +642,8 @@ button:focus-visible {outline:3px solid #0c6ced;outline-offset:3px}
       const ox = laneX(obj.lane), dy = Math.abs(obj.y-playerY), dx = Math.abs(ox-playerX);
       if (obj.kind === 'star') {
         if (dx < car.width*.48+13 && dy < car.height*.40+13) {
-          obj.used = true; stars++; score += 12; refreshHUD(); playStarSound();
+          obj.used = true; stars++; progress.totalStars++; saveProgress();
+          score += 12; refreshHUD(); playStarSound();
           createBurst(ox,obj.y,'#ffcf45',16);
           showToast(['星星到手！ ⭐','太棒啦！ 🌟','叮！闪闪星星 ✨'][Math.floor(rand(0,3))],.8);
         }
@@ -637,7 +808,7 @@ button:focus-visible {outline:3px solid #0c6ced;outline-offset:3px}
   function loop(now) {
     const dt = Math.min((now-lastFrame)/1000,.05);
     lastFrame = now;
-    if (phase === 'running') visualTime += dt*190;
+    if (phase === 'running') visualTime += dt*190*(speedMode==='fast'?1.6:speedMode==='slow'?.58:1);
     else if (phase === 'start' || phase === 'ready') visualTime += dt*30;
     update(dt);
     render();
@@ -666,14 +837,18 @@ button:focus-visible {outline:3px solid #0c6ced;outline-offset:3px}
   document.addEventListener('keydown', event => {
     if (event.key === 'ArrowLeft' || event.key.toLowerCase() === 'a') {moveLeft=true;event.preventDefault();}
     if (event.key === 'ArrowRight' || event.key.toLowerCase() === 'd') {moveRight=true;event.preventDefault();}
+    if (event.key === 'ArrowUp' || event.key.toLowerCase() === 'w') {moveFast=true;event.preventDefault();}
+    if (event.key === 'ArrowDown' || event.key.toLowerCase() === 's') {moveSlow=true;event.preventDefault();}
     if (event.key === ' ' && (phase==='running'||phase==='paused')) {pauseOrResume();event.preventDefault();}
   });
   document.addEventListener('keyup', event => {
     if (event.key === 'ArrowLeft' || event.key.toLowerCase() === 'a') moveLeft=false;
     if (event.key === 'ArrowRight' || event.key.toLowerCase() === 'd') moveRight=false;
+    if (event.key === 'ArrowUp' || event.key.toLowerCase() === 'w') moveFast=false;
+    if (event.key === 'ArrowDown' || event.key.toLowerCase() === 's') moveSlow=false;
   });
   document.addEventListener('visibilitychange', () => {if (document.hidden && phase === 'running')setPhase('paused');});
-  window.addEventListener('blur', () => {moveLeft=false;moveRight=false;});
+  window.addEventListener('blur', () => {moveLeft=false;moveRight=false;moveFast=false;moveSlow=false;touchFast=false;touchSlow=false;});
 
   $('gestureStart').addEventListener('click',()=>beginGesture(false));
   $('touchStart').addEventListener('click',beginTouch);
@@ -682,6 +857,9 @@ button:focus-visible {outline:3px solid #0c6ced;outline-offset:3px}
   $('resumeButton').addEventListener('click',pauseOrResume);
   $('replayButton').addEventListener('click',startAnotherRound);
   $('homeButton').addEventListener('click',goHome);
+  $('startHistory').addEventListener('click',openHistory);
+  $('overHistory').addEventListener('click',openHistory);
+  $('historyBack').addEventListener('click',closeHistory);
   $('changeMode').addEventListener('click', () => {
     if (mode === 'gesture') beginTouch();
     else beginGesture(true);
@@ -692,6 +870,23 @@ button:focus-visible {outline:3px solid #0c6ced;outline-offset:3px}
     if (soundOn){initAudio();note(900,.13);}
   });
 
+  for (const [id,which] of [['speedFast','fast'],['speedSlow','slow']]) {
+    const btn = $(id);
+    const down = e => {
+      if (phase !== 'running'||mode !== 'touch') return;
+      if (which==='fast') touchFast = true; else touchSlow = true;
+      setSpeedMode(which);
+      try {btn.setPointerCapture(e.pointerId);}catch(_){}
+      e.preventDefault();
+    };
+    const up = () => {if(which==='fast')touchFast=false;else touchSlow=false;};
+    btn.addEventListener('pointerdown',down);
+    btn.addEventListener('pointerup',up);
+    btn.addEventListener('pointercancel',up);
+    btn.addEventListener('lostpointercapture',up);
+  }
+  refreshProgress();
+  refreshSpeedUI();
   if ('ResizeObserver' in window) new ResizeObserver(resize).observe(shell);
   else window.addEventListener('resize',resize);
   resize();
